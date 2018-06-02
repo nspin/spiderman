@@ -1,3 +1,4 @@
+console.log("<<<>>>>");
 window.addEventListener('load', function(){
     var req = new XMLHttpRequest();
     req.addEventListener('load', function(){

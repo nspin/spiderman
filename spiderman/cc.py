@@ -11,15 +11,14 @@ DEFAULT_HOST = 'localhost'
 DEFAULT_PORT = 13337
 DEFAULT_NETLOC = '{}:{}'.format(DEFAULT_HOST, DEFAULT_PORT)
 
-def cc(driver, host=DEFAULT_HOST, port=DEFAULT_PORT):
-    return wsgiapp.WSGIApp(tornado.wsgi.WSGIAdapter(mk_app(driver)), host, port)
+def cc(host=DEFAULT_HOST, port=DEFAULT_PORT):
+    return wsgiapp.WSGIApp(tornado.wsgi.WSGIAdapter(mk_app()), host, port)
 
-def mk_app(driver):
+def mk_app():
     queue = Queue()
     handlers = [
         ('/next', NextHandler, {'queue': queue}),
         ('/enqueue', EnqueueHandler, {'queue': queue}),
-        ('(/driver.js)', DriverHandler, {'path': driver}), # hack
         ]
     return tornado.web.Application(handlers, debug=True)
 
@@ -65,22 +64,8 @@ class EnqueueHandler(tornado.web.RequestHandler):
         for url in urls:
             self.queue.enqueue(url)
 
-# hack
-class DriverHandler(tornado.web.StaticFileHandler):
-
-    def initialize(self, path):
-        self.root = path
-        self.default_filename = None
-
-    @classmethod
-    def get_absolute_path(cls, root, path):
-        return root
-
-    def validate_absolute_path(self, root, absolute_path):
-        return absolute_path
-
 if __name__ == '__main__':
     import tornado.ioloop
-    app = mk_app('example/driver.js')
+    app = mk_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
