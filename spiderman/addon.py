@@ -1,14 +1,20 @@
+import re
+
 from mitmproxy import ctx
 from mitmproxy.http import HTTPResponse
 from mitmproxy.net.http import Headers
 
 from spiderman.storage import Storage, Row
+import spiderman.cc
+
+body_re = re.compile(br'<\s*/\s*body\s*>')
 
 class Crawl(object):
 
-    def __init__(self, db, blob_dir, pred):
+    def __init__(self, db, blob_dir, pred, cc_netloc=spiderman.cc.DEFAULT_NETLOC):
         self.st = Storage(db, blob_dir)
         self.pred = pred
+        self.cc_netloc = cc_netloc
 
     def response(self, flow):
         if self.pred(flow):
@@ -21,6 +27,9 @@ class Crawl(object):
                         )
                     ctx.log.info('@ putting row: {}'.format(row))
                     self.st.put_row(row)
+        if flow.response.headers['content-type'].startswith('text/html'):
+            sub = r'<script src="https://{}/driver.js"></script>\0'.format(self.cc_netloc).encode('ascii')
+            flow.response.content = body_re.sub(sub, flow.response.content)
 
 class Serve(object):
 
