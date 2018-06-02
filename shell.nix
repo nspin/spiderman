@@ -5,8 +5,10 @@ with import <nixpkgs> {}; stdenv.mkDerivation {
     mitmproxy
     python3
     python3Packages.beautifulsoup4
+    python3Packages.selenium
+    python3Packages.requests
   ];
   shellHook = ''
-    export PYTHONPATH=".:$PYTHONPATH"
+    export PYTHONPATH="$PWD:$PYTHONPATH"
   '';
 }
