@@ -10,7 +10,6 @@ class Inject(object):
         self.script = script
 
     def response(self, flow):
-        ctx.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
         if 'content-type' in flow.response.headers and flow.response.headers['content-type'].startswith('text/html'):
             script = self.script(flow)
             if script:
