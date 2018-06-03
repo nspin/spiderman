@@ -7,6 +7,8 @@ with import <nixpkgs> {}; stdenv.mkDerivation {
     python3Packages.beautifulsoup4
     python3Packages.selenium
     python3Packages.requests
+    python3Packages.flask
+    python3Packages.werkzeug
   ];
   shellHook = ''
     export PYTHONPATH="$PWD:$PYTHONPATH"
