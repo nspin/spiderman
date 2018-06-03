@@ -1,5 +1,7 @@
+from spiderman.normalize import normalize_url
+from spiderman.addons import Serve
+
 from mitmproxy import ctx
-from spiderman import Serve, normalize_url
 
 def pred(flow):
     ctx.log(normalize_url(flow.request.url))
