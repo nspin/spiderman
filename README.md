@@ -7,6 +7,8 @@ The idea here is to use [mitmproxy](https://mitmproxy.org/) between the browser 
 Experience shows that surprisingly faithful archives can be collected and viewed with this simple approach.
 
 A headless browser can be used to automate parts of the archiving process.
+Alternatively, this project contains an addon for injecting JavaScript into passing HTML pages, along with a small command-and-control server, to drive the browser.
+This also works surprisingly well.
 
 ### Usage
 
